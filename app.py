@@ -1,6 +1,9 @@
 import os
+
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename, redirect
+
+from imgur_client import upload_image
 
 BASE_DIR = os.path.dirname(__file__)
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
@@ -13,7 +16,10 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['file']
         filename = secure_filename(f.filename)
-        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        f.save(file_path)
+        res = upload_image(file_path)
+        print(res['link'])
         return redirect('/')
 
 
