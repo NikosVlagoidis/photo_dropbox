@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename, redirect
 
-from imgur_client import upload_image
+from imgur_client import upload_image, get_photos
 
 BASE_DIR = os.path.dirname(__file__)
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static')
@@ -18,14 +18,13 @@ def upload_file():
         filename = secure_filename(f.filename)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         f.save(file_path)
-        res = upload_image(file_path)
-        print(res['link'])
+        upload_image(file_path)
         return redirect('/')
 
 
 @app.route('/')
 def hello_world():
-    pics = os.listdir(UPLOAD_FOLDER)
+    pics = [pic.link for pic in get_photos()]
     return render_template("homepage.html", pics=pics)
 
 

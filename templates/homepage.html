@@ -32,8 +32,8 @@
 </form>
 
 {% for pic in pics %}
-    <a href='/static/{{ pic }}'>
-        <img src='/static/{{ pic }}' class="img-thumbnail" width="300" height="236"/>
+    <a href='{{ pic }}'>
+        <img src='{{ pic }}' class="img-thumbnail" width="300" height="236"/>
     </a>
 {% endfor %}
 </div>
