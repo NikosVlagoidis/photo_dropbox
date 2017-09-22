@@ -2,7 +2,8 @@ import json
 import os
 from uuid import uuid4
 
-from flask import render_template, request
+from decouple import config
+from flask import render_template, request, session, flash, url_for
 from werkzeug.utils import redirect, secure_filename
 
 from factory import create_app
@@ -56,8 +57,26 @@ def upload():
         return redirect("/")
 
 
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if request.form['password'] == config('PASSWORD') \
+            and request.form['username'] == config('USERNAME'):
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return redirect(url_for('home_page'))
+
+
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    return redirect(url_for('home_page'))
+
+
 @app.route('/')
 def home_page():
+    if not session.get('logged_in'):
+        return render_template('login.html')
     pics = [pic.link for pic in get_photos()]
     return render_template("homepage.html", pics=pics)
 
