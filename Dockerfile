@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install --no-cache-dir uwsgi
 
-COPY requirements/prod.txt /app/requirements/prod.txt
+COPY requirements.txt /app/requirements/prod.txt
 RUN pip install --no-cache-dir -r /app/requirements/prod.txt
 
 COPY . /app
